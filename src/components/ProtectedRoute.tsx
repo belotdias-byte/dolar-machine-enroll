@@ -1,5 +1,8 @@
+
 import { useAuth } from "@/hooks/useAuth";
+import { useTrial } from "@/hooks/useTrial";
 import { Navigate } from "react-router-dom";
+import { TrialExpired } from "./TrialExpired";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,8 +11,9 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
   const { user, isLoading, isAdmin } = useAuth();
+  const { trial, isLoading: trialLoading, isExpired } = useTrial();
 
-  if (isLoading) {
+  if (isLoading || trialLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -26,6 +30,11 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
 
   if (requireAdmin && !isAdmin) {
     return <Navigate to="/auth" replace />;
+  }
+
+  // Se não é admin e o trial expirou, mostrar tela de expiração
+  if (!requireAdmin && !isAdmin && isExpired) {
+    return <TrialExpired />;
   }
 
   return <>{children}</>;

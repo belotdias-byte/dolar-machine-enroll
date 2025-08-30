@@ -191,7 +191,7 @@ export default function Auth() {
                 <CardTitle>{isSignUp ? "Cadastrar como Aluno" : "Login Aluno"}</CardTitle>
                 <CardDescription>
                   {isSignUp 
-                    ? "Crie sua conta para acessar as aulas" 
+                    ? "Crie sua conta para acessar 20 dias grátis" 
                     : "Acesse suas aulas gratuitas"
                   }
                 </CardDescription>
@@ -241,7 +241,7 @@ export default function Auth() {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Carregando..." : (isSignUp ? "Criar Conta" : "Entrar")}
+                    {isLoading ? "Carregando..." : (isSignUp ? "Criar Conta (20 dias grátis)" : "Entrar")}
                   </Button>
                 </form>
                 <div className="mt-4 text-center">
