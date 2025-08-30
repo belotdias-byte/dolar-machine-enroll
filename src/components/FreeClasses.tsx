@@ -7,23 +7,23 @@ import { useNavigate } from "react-router-dom";
 
 const classes = [
   {
-    title: "Fundamentos da Renda Online",
+    title: "Fundamentos da Máquina do Dólar",
     description: "Descubra os pilares essenciais para criar sua primeira fonte de receita digital"
   },
   {
-    title: "Identificando Oportunidades",
+    title: "Cria Conta Na Clickbank",
     description: "Como encontrar nichos lucrativos e avaliar o potencial de mercado"
   },
   {
-    title: "Estrutura de Negócio Digital",
+    title: "Como conectar seu Domínio no ClickFunnels",
     description: "Monte do zero um sistema que gera receita de forma automatizada"
   },
   {
-    title: "Estratégias de Monetização",
+    title: "Lançamento do Produto",
     description: "Múltiplas formas de transformar seu conhecimento em dinheiro"
   },
   {
-    title: "Marketing de Autoridade",
+    title: "Comunidade VIP",
     description: "Construa sua marca pessoal e se torne referência no seu nicho"
   },
   {
