@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { RegistrationModal } from "@/components/RegistrationModal";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const classes = [
   {
@@ -30,7 +33,20 @@ const classes = [
 ];
 
 export const FreeClasses = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegistrationSuccess = () => {
+    navigate("/sala-de-aulas");
+  };
+
   return (
+    <>
+      <RegistrationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleRegistrationSuccess}
+      />
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
@@ -108,6 +124,7 @@ export const FreeClasses = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setIsModalOpen(true)}
               className="bg-gradient-gold text-gold-foreground px-8 py-4 rounded-full font-bold tracking-wide uppercase hover:shadow-elevated transition-all duration-300"
             >
               Assistir Agora
@@ -116,5 +133,6 @@ export const FreeClasses = () => {
         </motion.div>
       </div>
     </section>
+    </>
   );
 };

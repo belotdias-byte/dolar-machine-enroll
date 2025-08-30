@@ -2,9 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { RegistrationModal } from "@/components/RegistrationModal";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const CtaFinal = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegistrationSuccess = () => {
+    navigate("/sala-de-aulas");
+  };
+
   return (
+    <>
+      <RegistrationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleRegistrationSuccess}
+      />
     <section className="py-20 bg-gradient-gold relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
@@ -82,6 +98,7 @@ export const CtaFinal = () => {
               variant="cta-final" 
               size="xl"
               className="animate-pulse hover:animate-none"
+              onClick={() => setIsModalOpen(true)}
             >
               Quero Acessar Agora
             </Button>
@@ -100,5 +117,6 @@ export const CtaFinal = () => {
         </motion.div>
       </div>
     </section>
+    </>
   );
 };

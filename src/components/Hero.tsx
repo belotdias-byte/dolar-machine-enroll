@@ -2,9 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { RegistrationModal } from "@/components/RegistrationModal";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegistrationSuccess = () => {
+    navigate("/sala-de-aulas");
+  };
+
   return (
+    <>
+      <RegistrationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleRegistrationSuccess}
+      />
     <section className="relative min-h-screen bg-gradient-hero flex items-center justify-center overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-transparent" />
@@ -71,6 +87,7 @@ export const Hero = () => {
               variant="hero" 
               size="xl"
               className="animate-glow"
+              onClick={() => setIsModalOpen(true)}
             >
               Acessar Aulas Gratuitas
             </Button>
@@ -99,5 +116,6 @@ export const Hero = () => {
         </motion.div>
       </div>
     </section>
+    </>
   );
 };
