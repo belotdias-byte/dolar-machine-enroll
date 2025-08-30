@@ -11,39 +11,39 @@ const modules = [
     subtitle: "Fundamentos da Máquina do Dólar",
     duration: "45 min",
     description: "Aprenda os conceitos fundamentais para começar sua jornada digital",
-    videoUrl: "https://drive.google.com/file/d/1saw1fie_hftOlywYsOMnmu_XQfsHo5z_/preview"
+    videoUrl: "https://drive.google.com/file/d/1PM8HFIMCpImct_S9yLJ68rYlLa6YUhNa/preview"
   },
   {
     id: 2,
     title: "Módulo de Aula 2",
-    subtitle: "Estratégias de Receita Online",
+    subtitle: "Cria Conta Na Clickbank",
     duration: "38 min",
     description: "Descubra as principais formas de gerar receita na internet",
-    videoUrl: null
+    videoUrl: "https://drive.google.com/file/d/1qI4wIPaVcVqQmYzE880zg2QBSlS1PsDN/preview"
   },
   {
     id: 3,
     title: "Módulo de Aula 3",
-    subtitle: "Construindo Sua Audiência",
+    subtitle: "Como conectar seu Domínio no ClickFunnels",
     duration: "42 min",
     description: "Como atrair e converter seu público-alvo em clientes",
-    videoUrl: null
+    videoUrl: "https://drive.google.com/file/d/1s-doWVmSrQ2PLKtXnK22dMyEFm12UfBg/preview"
   },
   {
     id: 4,
     title: "Módulo de Aula 4",
-    subtitle: "Automação e Escalabilidade",
+    subtitle: "Cria Conta Na Clickbank",
     duration: "35 min",
     description: "Sistematize seus processos para crescer sem trabalhar mais",
-    videoUrl: null
+    videoUrl: "https://drive.google.com/file/d/1meEScH9Q-Nwxrf1SjIVLhvEKMCKpdDAx/preview"
   },
   {
     id: 5,
     title: "Módulo de Aula 5",
-    subtitle: "Próximos Passos",
+    subtitle: "Lançamento do Produto",
     duration: "30 min",
     description: "Como dar o próximo passo na sua jornada empreendedora",
-    videoUrl: null
+    videoUrl: "https://drive.google.com/file/d/1meEScH9Q-Nwxrf1SjIVLhvEKMCKpdDAx/preview"
   }
 ];
 
