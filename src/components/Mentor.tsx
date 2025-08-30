@@ -75,7 +75,7 @@ export const Mentor = () => {
                 <div className="text-sm text-muted-foreground">Alunos Impactados</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gold">R$ 1M+</div>
+                <div className="text-2xl font-bold text-gold">euro</div>
                 <div className="text-sm text-muted-foreground">15+</div>
               </div>
             </div>
