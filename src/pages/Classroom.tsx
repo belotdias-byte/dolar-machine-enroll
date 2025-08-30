@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MachineDollarMark } from "@/components/MachineDollarMark";
 import { useAuth } from "@/hooks/useAuth";
+import { TrialTimer } from "@/components/TrialTimer";
+import { LessonComments } from "@/components/LessonComments";
 import { useState } from "react";
 
 const modules = [
@@ -68,6 +70,7 @@ export default function Classroom() {
               </h1>
             </div>
             <div className="flex items-center gap-4">
+              <TrialTimer />
               {user && (
                 <span className="text-sm text-muted-foreground">
                   Olá, {user.email}
@@ -205,6 +208,11 @@ export default function Classroom() {
                       </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Comments Section */}
+                <div className="bg-card rounded-xl p-6">
+                  <LessonComments lessonId={selectedModuleData.id} />
                 </div>
               </motion.div>
             ) : (

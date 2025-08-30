@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      lesson_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          id: string
+          lesson_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          id?: string
+          lesson_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: string
+          lesson_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
