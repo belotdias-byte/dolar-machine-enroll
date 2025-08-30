@@ -4,24 +4,25 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    text: "Em 6 meses consegui criar minha primeira fonte de renda online. As estratégias do Mário são realmente práticas e funcionam.",
-    name: "Ana Silva",
-    role: "Empreendedora Digital"
+    text: "Estava travado, sem saber como dar o próximo passo. A mentoria da Máquina do Dólar me deu o conhecimento certo e a confiança para agir. Já fiz minha primeira venda e estou só começando!",
+    name: "Ricardo Silva",
+    role: "",
+    image: "/lovable-uploads/4cb9741f-5323-445e-8616-b42d80f1c78f.png"
   },
   {
-    text: "Nunca imaginei que seria possível ganhar dinheiro na internet. Hoje tenho 3 fontes de receita diferentes graças aos ensinamentos.",
-    name: "Carlos Mendes",
-    role: "Consultor Online"
+    text: "Já tinha feito várias mentorias antes, mas nunca vi resultados concretos. Com o Mário Bernardo, finalmente entendi o que estava fazendo de errado. Agora, minhas vendas online não param de crescer!",
+    name: "Fernanda Souza",
+    role: ""
   },
   {
-    text: "O método é direto ao ponto, sem enrolação. Em poucos meses já estava faturando mais de R$ 10 mil por mês.",
-    name: "Mariana Costa",
-    role: "Produtora de Conteúdo"
+    text: "Eu estava completamente perdido e sem noção de como vender online. A mentoria do Mário Bernardo foi a virada de chave. Hoje, estou vendo vendas acontecendo de forma constante.",
+    name: "Carlos Oliveira",
+    role: ""
   },
   {
-    text: "A clareza com que o Mário explica as estratégias é impressionante. Consegui aplicar tudo e os resultados vieram rapidamente.",
-    name: "Roberto Santos",
-    role: "Coach Digital"
+    text: "Fiz a mentoria do Mário Bernardo e, pela primeira vez, senti que tudo fez sentido. O passo a passo foi fundamental para eu começar a vender online com segurança. Agora, meu negócio está decolando!",
+    name: "Juliana Costa",
+    role: ""
   },
   {
     text: "Transformei meu conhecimento em um negócio lucrativo. As aulas gratuitas já mudaram minha perspectiva sobre dinheiro online.",
@@ -88,11 +89,24 @@ export const Testimonials = () => {
 
                 {/* Author */}
                 <div className="border-t border-border pt-4">
-                  <div className="font-bold text-gold">
-                    {testimonial.name}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {testimonial.role}
+                  <div className="flex items-center gap-3">
+                    {testimonial.image && (
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    )}
+                    <div>
+                      <div className="font-bold text-gold">
+                        {testimonial.name}
+                      </div>
+                      {testimonial.role && (
+                        <div className="text-sm text-muted-foreground">
+                          {testimonial.role}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
