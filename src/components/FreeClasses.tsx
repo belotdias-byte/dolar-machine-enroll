@@ -24,7 +24,7 @@ const classes = [
   },
   {
     title: "Comunidade VIP",
-    description: "Construa sua marca pessoal e se torne referência no seu nicho"
+    description: "A Academia de Mentoria 2.0 não é apenas um curso, é um espaço de aprendizado coletivo, troca de experiências e crescimento. A Academia de Mentoria 2.0 acredita que ninguém precisa caminhar sozinho e que, com o direcionamento certo, qualquer pessoa pode sair do zero e conquistar resultados consistentes."
   },
   {
     title: "Escalando Resultados",
