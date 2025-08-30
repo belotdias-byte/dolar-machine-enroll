@@ -49,18 +49,11 @@ export const Mentor = () => {
 
             <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
               <p>
-                Empresário digital há mais de 10 anos, Mário Bernardo já ajudou milhares de pessoas 
-                a construírem seus negócios online do zero.
+                Com 15 anos de experiência no mercado digital, Mário Bernardo é um mentor de sucesso reconhecido por sua abordagem prática e estratégica no marketing de afiliados. Ao longo da sua carreira, ele ajudou centenas de pessoas a transformarem suas vidas financeiras, aplicando as técnicas e estratégias que ele mesmo utilizou para alcançar seus resultados.
               </p>
               
               <p>
-                Especialista em criação de múltiplas fontes de receita, ele desenvolveu estratégias 
-                comprovadas que transformaram a vida financeira de seus mentorados.
-              </p>
-              
-              <p>
-                Sua missão é desmistificar o mundo dos negócios digitais e ensinar de forma prática 
-                e objetiva, sem enrolação.
+                Se você está pronto para dar o primeiro passo no mundo do marketing digital, eu estou aqui para te guiar e te ajudar a alcançar a liberdade financeira que você merece.
               </p>
             </div>
 
