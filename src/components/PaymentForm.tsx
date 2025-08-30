@@ -1,31 +1,9 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Shield, Zap } from "lucide-react";
-import { toast } from "sonner";
 
 export const PaymentForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handlePayment = async () => {
-    setIsLoading(true);
-    try {
-      // This will need Stripe configuration
-      toast.info("Funcionalidade de pagamento em desenvolvimento. Configure sua Stripe Secret Key.");
-      
-      // Future implementation:
-      // const { data, error } = await supabase.functions.invoke('create-payment');
-      // if (error) throw error;
-      // window.open(data.url, '_blank');
-      
-    } catch (error: any) {
-      console.error('Payment error:', error);
-      toast.error("Erro ao processar pagamento");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <section className="py-20 bg-background-secondary">
@@ -84,17 +62,22 @@ export const PaymentForm = () => {
               </div>
 
               <Button 
-                onClick={handlePayment}
-                disabled={isLoading}
+                asChild
                 size="lg"
                 className="w-full bg-gradient-gold hover:bg-gradient-gold/90 text-gold-foreground font-semibold"
               >
-                {isLoading ? "Processando..." : "Quero Acesso Completo"}
+                <a
+                  href="https://pay.hotmart.com/R95417644X?checkoutMode=10&bid=1756577122606"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Quero Acesso Completo
+                </a>
               </Button>
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Shield className="w-4 h-4" />
-                Pagamento 100% seguro via Stripe
+                Pagamento 100% seguro via Hotmart
               </div>
             </CardContent>
           </Card>
