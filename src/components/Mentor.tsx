@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import marioImage from "@/assets/mentor-updated.jpg";
+import marioImage from "@/assets/mentor-new.jpg";
 export const Mentor = () => {
   return <section className="py-20 bg-background-secondary">
       <div className="container mx-auto px-4">
