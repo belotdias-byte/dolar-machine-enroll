@@ -19,7 +19,7 @@ export const Mentor = () => {
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-gold rounded-3xl blur-2xl opacity-20" />
               <img
-                src={marioImage}
+                src="/lovable-uploads/f0d7d000-239c-4258-80bf-8e17437ff04a.png"
                 alt="Mário Bernardo - Mentor"
                 className="relative w-full max-w-md mx-auto rounded-2xl shadow-elevated"
               />
