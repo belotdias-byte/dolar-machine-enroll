@@ -2,40 +2,41 @@
 
 import { motion } from "framer-motion";
 import marioImage from "@/assets/mario-bernardo.jpg";
-
 export const Mentor = () => {
-  return (
-    <section className="py-20 bg-background-secondary">
+  return <section className="py-20 bg-background-secondary">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-6xl mx-auto">
           {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          x: -50
+        }} whileInView={{
+          opacity: 1,
+          x: 0
+        }} transition={{
+          duration: 0.8
+        }} viewport={{
+          once: true
+        }} className="relative">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-gold rounded-3xl blur-2xl opacity-20" />
-              <div className="bg-muted rounded-3xl p-6">
-                <img
-                  src="/lovable-uploads/f0d7d000-239c-4258-80bf-8e17437ff04a.png"
-                  alt="Mário Bernardo - Mentor"
-                  className="relative w-full max-w-lg mx-auto rounded-2xl shadow-elevated"
-                />
-              </div>
+              <img src={marioImage} alt="Mário Bernardo - Mentor" className="relative w-full max-w-md mx-auto rounded-2xl shadow-elevated" />
             </div>
           </motion.div>
 
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          x: 50
+        }} whileInView={{
+          opacity: 1,
+          x: 0
+        }} transition={{
+          duration: 0.8,
+          delay: 0.2
+        }} viewport={{
+          once: true
+        }} className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-4xl lg:text-5xl font-bold text-foreground">
                 Conheça seu{" "}
@@ -58,15 +59,8 @@ export const Mentor = () => {
               </p>
               
               <p>
-                Com 15 anos de experiência no mercado digital, Mário Bernardo é um mentor de sucesso 
-                reconhecido por sua abordagem prática e estratégica no marketing de afiliados. Ao longo 
-                da sua carreira, ele ajudou centenas de pessoas a transformarem suas vidas financeiras, 
-                aplicando as técnicas e estratégias que ele mesmo utilizou para alcançar seus resultados.
-              </p>
-              
-              <p>
-                Se você está pronto para dar o primeiro passo no mundo do marketing digital, eu estou 
-                aqui para te guiar e te ajudar a alcançar a liberdade financeira que você merece.
+                Sua missão é desmistificar o mundo dos negócios digitais e ensinar de forma prática 
+                e objetiva, sem enrolação.
               </p>
             </div>
 
@@ -82,12 +76,11 @@ export const Mentor = () => {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-gold">R$ 1M+</div>
-                <div className="text-sm text-muted-foreground">Gerados pelos Alunos</div>
+                <div className="text-sm text-muted-foreground">15+</div>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
