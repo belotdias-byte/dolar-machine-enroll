@@ -18,11 +18,13 @@ export const Mentor = () => {
           >
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-gold rounded-3xl blur-2xl opacity-20" />
-              <img
-                src="/lovable-uploads/f0d7d000-239c-4258-80bf-8e17437ff04a.png"
-                alt="Mário Bernardo - Mentor"
-                className="relative w-full max-w-md mx-auto rounded-2xl shadow-elevated"
-              />
+              <div className="bg-muted rounded-3xl p-6">
+                <img
+                  src="/lovable-uploads/f0d7d000-239c-4258-80bf-8e17437ff04a.png"
+                  alt="Mário Bernardo - Mentor"
+                  className="relative w-full max-w-lg mx-auto rounded-2xl shadow-elevated"
+                />
+              </div>
             </div>
           </motion.div>
 
