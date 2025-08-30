@@ -85,7 +85,7 @@ export const VideoSection = () => {
               ) : (
                 <iframe
                   className="w-full h-full"
-                  src="https://drive.google.com/file/d/SEU_VIDEO_ID_AQUI/preview"
+                  src="https://drive.google.com/file/d/1saw1fie_hftOlywYsOMnmu_XQfsHo5z_/preview"
                   title="Máquina do Dólar - Aula Exclusiva"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
