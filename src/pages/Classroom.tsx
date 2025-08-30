@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Play, Clock, CheckCircle } from "lucide-react";
+import { Play, Clock, CheckCircle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MachineDollarMark } from "@/components/MachineDollarMark";
+import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 
 const modules = [
@@ -49,6 +50,7 @@ const modules = [
 ];
 
 export default function Classroom() {
+  const { signOut, user } = useAuth();
   const [selectedModule, setSelectedModule] = useState<number | null>(1);
 
   const selectedModuleData = modules.find(m => m.id === selectedModule);
@@ -58,11 +60,29 @@ export default function Classroom() {
       {/* Header */}
       <header className="bg-background-secondary border-b border-border">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <MachineDollarMark size={40} />
-            <h1 className="text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-              Máquina do Dólar - Sala de Aulas
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <MachineDollarMark size={40} />
+              <h1 className="text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
+                Máquina do Dólar - Sala de Aulas
+              </h1>
+            </div>
+            <div className="flex items-center gap-4">
+              {user && (
+                <span className="text-sm text-muted-foreground">
+                  Olá, {user.email}
+                </span>
+              )}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={signOut}
+                className="flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sair
+              </Button>
+            </div>
           </div>
         </div>
       </header>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RegistrationModal } from "@/components/RegistrationModal";
+import { MachineDollarMark } from "@/components/MachineDollarMark";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -46,17 +47,20 @@ export const Hero = () => {
           </motion.div>
 
           {/* Main Headline */}
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
+            className="flex items-center justify-center gap-4 mb-6"
           >
-            Ativa a Sua{" "}
-            <span className="bg-gradient-gold bg-clip-text text-transparent">
-              Máquina do Dólar
-            </span>
-          </motion.h1>
+            <MachineDollarMark size={80} />
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
+              Ativa a Sua{" "}
+              <span className="bg-gradient-gold bg-clip-text text-transparent">
+                Máquina do Dólar
+              </span>
+            </h1>
+          </motion.div>
 
           {/* Copy */}
           <motion.p

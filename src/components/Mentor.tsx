@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import marioImage from "@/assets/mentor-new.jpg";
+import marioImage from "@/assets/mario-bernardo.jpg";
 
 export const Mentor = () => {
   return (

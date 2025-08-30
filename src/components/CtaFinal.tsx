@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RegistrationModal } from "@/components/RegistrationModal";
+import { PaymentForm } from "@/components/PaymentForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -117,6 +118,9 @@ export const CtaFinal = () => {
         </motion.div>
       </div>
     </section>
+    
+    {/* Payment Form Section */}
+    <PaymentForm />
     </>
   );
 };
