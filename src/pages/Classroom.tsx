@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Play, Clock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { MachineDollarMark } from "@/components/MachineDollarMark";
 import { useState } from "react";
 
 const modules = [
@@ -57,9 +58,12 @@ export default function Classroom() {
       {/* Header */}
       <header className="bg-background-secondary border-b border-border">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-            Máquina do Dólar - Sala de Aulas
-          </h1>
+          <div className="flex items-center gap-3">
+            <MachineDollarMark size={40} />
+            <h1 className="text-2xl font-bold bg-gradient-gold bg-clip-text text-transparent">
+              Máquina do Dólar - Sala de Aulas
+            </h1>
+          </div>
         </div>
       </header>
 
