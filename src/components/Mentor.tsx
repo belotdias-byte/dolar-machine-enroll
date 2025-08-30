@@ -21,7 +21,7 @@ export const Mentor = () => {
         }} className="relative">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-gold rounded-3xl blur-2xl opacity-20" />
-              <img src="/lovable-uploads/68044990-83c2-4b41-8375-2926fed44cff.png" alt="Mário Bernardo - Mentor" className="relative w-full max-w-xl mx-auto rounded-2xl shadow-elevated" />
+              <img src="/lovable-uploads/68044990-83c2-4b41-8375-2926fed44cff.png" alt="Mário Bernardo - Mentor" className="relative w-full max-w-3xl mx-auto rounded-2xl shadow-elevated" />
             </div>
           </motion.div>
 
