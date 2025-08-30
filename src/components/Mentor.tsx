@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Euro } from "lucide-react";
 import marioImage from "@/assets/mentor-new.jpg";
 export const Mentor = () => {
   return <section className="py-20 bg-background-secondary">
@@ -72,7 +73,7 @@ export const Mentor = () => {
                 <div className="text-sm text-muted-foreground">Alunos Impactados</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gold">euro</div>
+                <Euro className="w-8 h-8 mx-auto text-gold" strokeWidth={3} aria-label="Ícone Euro" />
                 <div className="text-sm text-muted-foreground">15+</div>
               </div>
             </div>
