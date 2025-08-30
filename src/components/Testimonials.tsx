@@ -6,8 +6,7 @@ const testimonials = [
   {
     text: "Estava travado, sem saber como dar o próximo passo. A mentoria da Máquina do Dólar me deu o conhecimento certo e a confiança para agir. Já fiz minha primeira venda e estou só começando!",
     name: "Ricardo Silva",
-    role: "",
-    image: "/lovable-uploads/4cb9741f-5323-445e-8616-b42d80f1c78f.png"
+    role: ""
   },
   {
     text: "Já tinha feito várias mentorias antes, mas nunca vi resultados concretos. Com o Mário Bernardo, finalmente entendi o que estava fazendo de errado. Agora, minhas vendas online não param de crescer!",
@@ -89,25 +88,14 @@ export const Testimonials = () => {
 
                 {/* Author */}
                 <div className="border-t border-border pt-4">
-                  <div className="flex items-center gap-3">
-                    {testimonial.image && (
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    )}
-                    <div>
-                      <div className="font-bold text-gold">
-                        {testimonial.name}
-                      </div>
-                      {testimonial.role && (
-                        <div className="text-sm text-muted-foreground">
-                          {testimonial.role}
-                        </div>
-                      )}
-                    </div>
+                  <div className="font-bold text-gold">
+                    {testimonial.name}
                   </div>
+                  {testimonial.role && (
+                    <div className="text-sm text-muted-foreground">
+                      {testimonial.role}
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
