@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import marioImage from "@/assets/mentor-new.jpg";
+import marioImage from "@/assets/mentor-updated.jpg";
 export const Mentor = () => {
   return <section className="py-20 bg-background-secondary">
       <div className="container mx-auto px-4">
@@ -20,7 +20,7 @@ export const Mentor = () => {
         }} className="relative">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-gold rounded-3xl blur-2xl opacity-20" />
-              <img src={marioImage} alt="Mário Bernardo - Mentor" className="relative w-full max-w-md mx-auto rounded-2xl shadow-elevated" />
+              <img src={marioImage} alt="Mário Bernardo - Mentor" className="relative w-full max-w-xl mx-auto rounded-2xl shadow-elevated" />
             </div>
           </motion.div>
 
