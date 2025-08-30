@@ -14,9 +14,7 @@ interface Comment {
   lesson_id: number;
   comment: string;
   created_at: string;
-  profiles?: {
-    full_name: string;
-  } | null;
+  user_name?: string;
 }
 
 interface LessonCommentsProps {
@@ -48,10 +46,11 @@ export function LessonComments({ lessonId }: LessonCommentsProps) {
 
       if (error) {
         console.error('Erro ao buscar comentários:', error);
+        setComments([]);
         return;
       }
 
-      // Buscar profiles separadamente
+      // Buscar profiles separadamente e mapear corretamente
       const commentsWithProfiles = await Promise.all(
         (data || []).map(async (comment) => {
           const { data: profile } = await supabase
@@ -62,7 +61,7 @@ export function LessonComments({ lessonId }: LessonCommentsProps) {
           
           return {
             ...comment,
-            profiles: profile
+            user_name: profile?.full_name || 'Usuário'
           };
         })
       );
@@ -70,6 +69,7 @@ export function LessonComments({ lessonId }: LessonCommentsProps) {
       setComments(commentsWithProfiles);
     } catch (error) {
       console.error('Erro ao buscar comentários:', error);
+      setComments([]);
     } finally {
       setIsLoading(false);
     }
@@ -214,7 +214,7 @@ export function LessonComments({ lessonId }: LessonCommentsProps) {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="font-medium text-foreground">
-                          {comment.profiles?.full_name || 'Usuário'}
+                          {comment.user_name || 'Usuário'}
                         </span>
                         <span className="text-xs text-muted-foreground">
                           {new Date(comment.created_at).toLocaleDateString('pt-BR', {
