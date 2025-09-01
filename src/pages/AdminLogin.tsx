@@ -9,14 +9,17 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { MachineDollarMark } from "@/components/MachineDollarMark";
 import { toast } from "sonner";
-import { Shield } from "lucide-react";
+import { Shield, UserPlus } from "lucide-react";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
+  const [adminName, setAdminName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Redirect if already authenticated as admin
   useEffect(() => {
@@ -38,9 +41,29 @@ export default function AdminLogin() {
 
   const handleAdminAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!adminEmail || !adminPassword) {
-      toast.error("Preencha todos os campos");
-      return;
+    
+    if (isRegisterMode) {
+      // Registration validation
+      if (!adminName || !adminEmail || !adminPassword || !confirmPassword) {
+        toast.error("Preencha todos os campos");
+        return;
+      }
+      
+      if (adminPassword !== confirmPassword) {
+        toast.error("As senhas não coincidem");
+        return;
+      }
+      
+      if (adminPassword.length < 6) {
+        toast.error("A senha deve ter pelo menos 6 caracteres");
+        return;
+      }
+    } else {
+      // Login validation
+      if (!adminEmail || !adminPassword) {
+        toast.error("Preencha todos os campos");
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -48,36 +71,74 @@ export default function AdminLogin() {
       cleanupAuthState();
       await supabase.auth.signOut({ scope: 'global' });
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: adminEmail,
-        password: adminPassword,
-      });
+      if (isRegisterMode) {
+        // Register new admin
+        const { data, error } = await supabase.auth.signUp({
+          email: adminEmail,
+          password: adminPassword,
+          options: {
+            emailRedirectTo: `${window.location.origin}/admin/login`,
+            data: {
+              full_name: adminName,
+            }
+          }
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      if (data.user) {
-        // Check if user has admin role
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
+        if (data.user) {
+          // Add admin role
+          const { error: roleError } = await supabase
+            .from('user_roles')
+            .insert({
+              user_id: data.user.id,
+              role: 'admin'
+            });
 
-        if (roleData) {
-          toast.success("Login administrativo realizado com sucesso!");
-          window.location.href = '/admin';
-        } else {
-          await supabase.auth.signOut();
-          toast.error("Acesso negado. Credenciais de administrador inválidas.");
+          if (roleError) {
+            console.error('Error adding admin role:', roleError);
+          }
+
+          toast.success("Administrador registrado com sucesso! Verifique seu email para confirmar a conta.");
+          setIsRegisterMode(false);
+          setAdminName("");
+          setConfirmPassword("");
+        }
+      } else {
+        // Login existing admin
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: adminEmail,
+          password: adminPassword,
+        });
+
+        if (error) throw error;
+
+        if (data.user) {
+          // Check if user has admin role
+          const { data: roleData } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', data.user.id)
+            .eq('role', 'admin')
+            .maybeSingle();
+
+          if (roleData) {
+            toast.success("Login administrativo realizado com sucesso!");
+            window.location.href = '/admin';
+          } else {
+            await supabase.auth.signOut();
+            toast.error("Acesso negado. Credenciais de administrador inválidas.");
+          }
         }
       }
     } catch (error: any) {
       console.error('Admin auth error:', error);
       if (error.message.includes('Invalid login credentials')) {
         toast.error("Credenciais inválidas. Verifique email e senha de administrador.");
+      } else if (error.message.includes('User already registered')) {
+        toast.error("Este email já está registrado. Tente fazer login.");
       } else {
-        toast.error(error.message || "Erro no login administrativo");
+        toast.error(error.message || `Erro no ${isRegisterMode ? 'registro' : 'login'} administrativo`);
       }
     } finally {
       setIsLoading(false);
@@ -105,22 +166,36 @@ export default function AdminLogin() {
             Painel Administrativo
           </h1>
           <p className="text-muted-foreground mt-2">
-            Acesso restrito para administradores
+            {isRegisterMode ? 'Registrar novo administrador' : 'Acesso restrito para administradores'}
           </p>
         </div>
 
         <Card className="border-gold/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="text-gold" size={20} />
-              Login Administrativo
+              {isRegisterMode ? <UserPlus className="text-gold" size={20} /> : <Shield className="text-gold" size={20} />}
+              {isRegisterMode ? 'Registro Administrativo' : 'Login Administrativo'}
             </CardTitle>
             <CardDescription>
-              Credenciais de administrador necessárias
+              {isRegisterMode ? 'Criar nova conta de administrador' : 'Credenciais de administrador necessárias'}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAdminAuth} className="space-y-4">
+              {isRegisterMode && (
+                <div>
+                  <Label htmlFor="adminName">Nome Completo</Label>
+                  <Input
+                    id="adminName"
+                    type="text"
+                    value={adminName}
+                    onChange={(e) => setAdminName(e.target.value)}
+                    placeholder="Digite seu nome completo"
+                    className="border-gold/30 focus:border-gold"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <Label htmlFor="adminEmail">Email de Administrador</Label>
                 <Input
@@ -140,17 +215,52 @@ export default function AdminLogin() {
                   type="password"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
+                  placeholder={isRegisterMode ? "Mínimo 6 caracteres" : ""}
                   className="border-gold/30 focus:border-gold"
                   required
                 />
               </div>
+              {isRegisterMode && (
+                <div>
+                  <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Digite a senha novamente"
+                    className="border-gold/30 focus:border-gold"
+                    required
+                  />
+                </div>
+              )}
               <Button 
                 type="submit" 
                 className="w-full bg-gradient-gold hover:opacity-90" 
                 disabled={isLoading}
               >
-                {isLoading ? "Verificando credenciais..." : "Acessar Painel"}
+                {isLoading 
+                  ? (isRegisterMode ? "Registrando..." : "Verificando credenciais...")
+                  : (isRegisterMode ? "Registrar Administrador" : "Acessar Painel")
+                }
               </Button>
+              
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterMode(!isRegisterMode);
+                    setAdminName("");
+                    setConfirmPassword("");
+                  }}
+                  className="text-sm text-muted-foreground hover:text-gold transition-colors"
+                >
+                  {isRegisterMode 
+                    ? "Já tem uma conta? Fazer login" 
+                    : "Não tem conta? Registrar administrador"
+                  }
+                </button>
+              </div>
             </form>
           </CardContent>
         </Card>
