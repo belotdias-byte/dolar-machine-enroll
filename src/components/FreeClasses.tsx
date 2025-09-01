@@ -8,19 +8,19 @@ import { useNavigate } from "react-router-dom";
 const classes = [
   {
     title: "Fundamentos da Máquina do Dólar",
-    description: "Descubra os pilares essenciais para criar sua primeira fonte de receita digital"
+    description: "Aprenda a montar uma máquina de vendas automática que gera renda para você todos os dias."
   },
   {
-    title: "Cria Conta Na Clickbank",
-    description: "Como encontrar nichos lucrativos e avaliar o potencial de mercado"
+    title: "Criação de Conta na ClickBank",
+    description: "Passo a passo simples para criar sua conta e começar a vender produtos digitais no maior marketplace do mundo."
   },
   {
-    title: "Como conectar seu Domínio no ClickFunnels",
-    description: "Monte do zero um sistema que gera receita de forma automatizada"
+    title: "Conectar Domínio no ClickFunnels",
+    description: "Configuração simples e acompanhada para deixar suas páginas profissionais e prontas para vender."
   },
   {
-    title: "Lançamento do Produto",
-    description: "Múltiplas formas de transformar seu conhecimento em dinheiro"
+    title: "Lançamento do Produto (com Facebook Ads)",
+    description: "Aprenda a lançar seu produto do zero. Eu ensino e acompanho você na criação de anúncios no Facebook Ads para atrair clientes e vender de forma previsível."
   },
   {
     title: "Comunidade VIP",
@@ -28,7 +28,7 @@ const classes = [
   },
   {
     title: "Escalando Resultados",
-    description: "Como multiplicar seus ganhos e criar um negócio sustentável"
+    description: "Descubra como multiplicar suas vendas. Vou te mostrar como otimizar anúncios e investir mais sem desperdiçar dinheiro."
   }
 ];
 
