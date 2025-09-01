@@ -43,6 +43,24 @@ const Index = () => {
       <VideoSection />
       <Testimonials />
       <CtaFinal />
+      
+      {/* Discrete admin access link in footer */}
+      <footer className="bg-background-secondary py-4 border-t border-border/10">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            © 2024 Máquina do Dólar. Todos os direitos reservados.
+            <span className="text-xs text-muted-foreground/50 ml-4">
+              <button
+                onClick={() => navigate("/admin/login")}
+                className="hover:text-gold transition-colors"
+                style={{ fontSize: '10px' }}
+              >
+                •
+              </button>
+            </span>
+          </p>
+        </div>
+      </footer>
     </main>
   );
 };

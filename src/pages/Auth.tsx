@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -24,9 +23,7 @@ export default function Auth() {
   const [studentPhone, setStudentPhone] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   
-  // Admin form
-  const [adminEmail, setAdminEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
+  // Admin form removed - now handled in separate AdminLogin component
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -119,45 +116,7 @@ export default function Auth() {
     }
   };
 
-  const handleAdminAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!adminEmail || !adminPassword) return;
-
-    setIsLoading(true);
-    try {
-      cleanupAuthState();
-      await supabase.auth.signOut({ scope: 'global' });
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: adminEmail,
-        password: adminPassword,
-      });
-
-      if (error) throw error;
-
-      if (data.user) {
-        // Check if user has admin role
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-
-        if (roleData) {
-          window.location.href = '/admin';
-        } else {
-          await supabase.auth.signOut();
-          toast.error("Acesso negado. Usuário não é administrador.");
-        }
-      }
-    } catch (error: any) {
-      console.error('Admin auth error:', error);
-      toast.error(error.message || "Erro no login administrativo");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Admin authentication moved to separate AdminLogin component
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
@@ -179,13 +138,7 @@ export default function Auth() {
           </p>
         </div>
 
-        <Tabs defaultValue="student" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="student">Aluno</TabsTrigger>
-            <TabsTrigger value="admin">Admin</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="student">
+        <div className="w-full">
             <Card>
               <CardHeader>
                 <CardTitle>{isSignUp ? "Cadastrar como Aluno" : "Login Aluno"}</CardTitle>
@@ -255,46 +208,7 @@ export default function Auth() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="admin">
-            <Card>
-              <CardHeader>
-                <CardTitle>Login Administrativo</CardTitle>
-                <CardDescription>
-                  Acesso restrito para administradores
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleAdminAuth} className="space-y-4">
-                  <div>
-                    <Label htmlFor="adminEmail">Email Admin</Label>
-                    <Input
-                      id="adminEmail"
-                      type="email"
-                      value={adminEmail}
-                      onChange={(e) => setAdminEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="adminPassword">Senha</Label>
-                    <Input
-                      id="adminPassword"
-                      type="password"
-                      value={adminPassword}
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Carregando..." : "Entrar"}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        </div>
 
         <div className="mt-6 text-center">
           <button
