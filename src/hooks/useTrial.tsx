@@ -26,6 +26,32 @@ export function useTrial() {
     }
 
     fetchTrial();
+    
+    // Configurar escuta em tempo real para mudanças no trial do usuário
+    const channel = supabase
+      .channel('trial-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'trials',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Trial atualizado em tempo real:', payload);
+          if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+            setTrial(payload.new as Trial);
+          } else if (payload.eventType === 'DELETE') {
+            setTrial(null);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   useEffect(() => {

@@ -37,10 +37,47 @@ export default function Admin() {
   useEffect(() => {
     fetchData();
     
-    // Atualizar dados a cada minuto para tempo real
+    // Configurar escuta em tempo real para registrations e trials
+    const registrationsChannel = supabase
+      .channel('registrations-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'registrations'
+        },
+        (payload) => {
+          console.log('Registration atualizada:', payload);
+          fetchRegistrations(); // Re-fetch registrations
+        }
+      )
+      .subscribe();
+
+    const trialsChannel = supabase
+      .channel('trials-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'trials'
+        },
+        (payload) => {
+          console.log('Trial atualizado:', payload);
+          fetchUsersWithTrials(); // Re-fetch trials
+        }
+      )
+      .subscribe();
+
+    // Ainda manter atualização a cada minuto como fallback
     const interval = setInterval(fetchData, 60000);
     
-    return () => clearInterval(interval);
+    return () => {
+      supabase.removeChannel(registrationsChannel);
+      supabase.removeChannel(trialsChannel);
+      clearInterval(interval);
+    };
   }, []);
 
   const fetchData = async () => {
