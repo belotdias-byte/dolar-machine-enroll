@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -25,9 +26,6 @@ export default function AdminLogin() {
   useEffect(() => {
     if (user && isAdmin) {
       navigate("/admin");
-    } else if (user && !isAdmin) {
-      // If user is logged in but not admin, redirect to student area
-      navigate("/sala-de-aulas");
     }
   }, [user, isAdmin, navigate]);
 
@@ -124,7 +122,7 @@ export default function AdminLogin() {
 
           if (roleData) {
             toast.success("Login administrativo realizado com sucesso!");
-            window.location.href = '/admin';
+            navigate("/admin");
           } else {
             await supabase.auth.signOut();
             toast.error("Acesso negado. Credenciais de administrador inválidas.");
