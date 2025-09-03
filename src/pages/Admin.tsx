@@ -1,10 +1,11 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Calendar, Mail, Phone, Clock, AlertTriangle } from "lucide-react";
+import { Users, Calendar, Mail, Phone, Clock, AlertTriangle, LogOut, MessageSquare, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Registration {
   id: string;
@@ -29,9 +30,22 @@ interface UserWithTrial {
   };
 }
 
+interface LessonComment {
+  id: string;
+  comment: string;
+  created_at: string;
+  lesson_id: number;
+  user_id: string;
+  profiles: {
+    full_name: string;
+  };
+}
+
 export default function Admin() {
+  const { signOut } = useAuth();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [usersWithTrials, setUsersWithTrials] = useState<UserWithTrial[]>([]);
+  const [lessonComments, setLessonComments] = useState<LessonComment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -70,19 +84,40 @@ export default function Admin() {
       )
       .subscribe();
 
+    const commentsChannel = supabase
+      .channel('comments-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'lesson_comments'
+        },
+        (payload) => {
+          console.log('Comentário atualizado:', payload);
+          fetchLessonComments(); // Re-fetch comments
+        }
+      )
+      .subscribe();
+
     // Ainda manter atualização a cada minuto como fallback
     const interval = setInterval(fetchData, 60000);
     
     return () => {
       supabase.removeChannel(registrationsChannel);
       supabase.removeChannel(trialsChannel);
+      supabase.removeChannel(commentsChannel);
       clearInterval(interval);
     };
   }, []);
 
   const fetchData = async () => {
     try {
-      await Promise.all([fetchRegistrations(), fetchUsersWithTrials()]);
+      await Promise.all([
+        fetchRegistrations(), 
+        fetchUsersWithTrials(),
+        fetchLessonComments()
+      ]);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast({
@@ -106,19 +141,18 @@ export default function Admin() {
   };
 
   const fetchUsersWithTrials = async () => {
-    // Buscar usuários com papel de estudante e seus trials
+    // Buscar usuários com trials (estudantes registrados)
     const { data, error } = await supabase
-      .from("profiles")
+      .from("trials")
       .select(`
         id,
         user_id,
-        full_name,
-        phone,
+        started_at,
+        ends_at,
         created_at,
-        trials!inner (
-          id,
-          started_at,
-          ends_at
+        profiles!inner (
+          full_name,
+          phone
         )
       `)
       .order("created_at", { ascending: false });
@@ -128,51 +162,86 @@ export default function Admin() {
       return;
     }
 
-    const usersWithTrialsData: UserWithTrial[] = (data || []).map((user: any) => {
-      const trial = user.trials;
+    const usersWithTrialsData: UserWithTrial[] = (data || []).map((trial: any) => {
       let timeRemaining = "";
       let isExpired = false;
 
-      if (trial) {
-        const now = new Date();
-        const endDate = new Date(trial.ends_at);
-        const diff = endDate.getTime() - now.getTime();
+      const now = new Date();
+      const endDate = new Date(trial.ends_at);
+      const diff = endDate.getTime() - now.getTime();
 
-        if (diff <= 0) {
-          isExpired = true;
-          timeRemaining = "Expirado";
+      if (diff <= 0) {
+        isExpired = true;
+        timeRemaining = "Expirado";
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        if (days > 0) {
+          timeRemaining = `${days}d ${hours}h`;
+        } else if (hours > 0) {
+          timeRemaining = `${hours}h ${minutes}m`;
         } else {
-          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-          if (days > 0) {
-            timeRemaining = `${days}d ${hours}h`;
-          } else if (hours > 0) {
-            timeRemaining = `${hours}h ${minutes}m`;
-          } else {
-            timeRemaining = `${minutes}m`;
-          }
+          timeRemaining = `${minutes}m`;
         }
       }
 
       return {
-        id: user.user_id,
-        full_name: user.full_name || "Nome não informado",
-        email: "Email não disponível", // Perfil não tem email, seria necessário join com auth.users
-        phone: user.phone || "Telefone não informado",
-        created_at: user.created_at,
-        trial: trial ? {
+        id: trial.user_id,
+        full_name: trial.profiles?.full_name || "Nome não informado",
+        email: "Email disponível no painel do Supabase", 
+        phone: trial.profiles?.phone || "Telefone não informado",
+        created_at: trial.created_at,
+        trial: {
           id: trial.id,
           started_at: trial.started_at,
           ends_at: trial.ends_at,
           time_remaining: timeRemaining,
           is_expired: isExpired
-        } : undefined
+        }
       };
     });
 
     setUsersWithTrials(usersWithTrialsData);
+  };
+
+  const fetchLessonComments = async () => {
+    const { data, error } = await supabase
+      .from("lesson_comments")
+      .select(`
+        id,
+        comment,
+        created_at,
+        lesson_id,
+        user_id
+      `)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Erro ao buscar comentários:", error);
+      return;
+    }
+
+    // Buscar nomes dos usuários separadamente
+    const commentsWithUsers: LessonComment[] = [];
+    
+    for (const comment of data || []) {
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("user_id", comment.user_id)
+        .single();
+        
+      commentsWithUsers.push({
+        ...comment,
+        profiles: {
+          full_name: profileData?.full_name || "Usuário desconhecido"
+        }
+      });
+    }
+
+    setLessonComments(commentsWithUsers);
   };
 
   const formatDate = (dateString: string) => {
@@ -209,12 +278,24 @@ export default function Admin() {
       {/* Header */}
       <header className="bg-background-secondary border-b border-border">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-            Painel Administrativo
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Máquina do Dólar - Gestão de Inscrições e Períodos de Teste
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-gold bg-clip-text text-transparent">
+                Painel Administrativo
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                Máquina do Dólar - Gestão de Inscrições e Períodos de Teste
+              </p>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={signOut}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Sair
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -347,10 +428,62 @@ export default function Admin() {
           </CardContent>
         </Card>
 
+        {/* Lesson Comments */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <MessageSquare className="w-5 h-5" />
+              Comentários das Aulas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {lessonComments.length === 0 ? (
+              <div className="text-center py-12">
+                <MessageSquare size={48} className="text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground text-lg">
+                  Nenhum comentário encontrado
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {lessonComments.map((comment) => (
+                  <Card key={comment.id} className="bg-background-secondary">
+                    <CardContent className="p-4">
+                      <div className="grid md:grid-cols-4 gap-4 items-start">
+                        <div>
+                          <h3 className="font-semibold text-foreground">
+                            {comment.profiles?.full_name || "Usuário desconhecido"}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {formatDate(comment.created_at)}
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Video size={16} className="text-gold" />
+                          <span className="text-sm text-foreground">
+                            Módulo {comment.lesson_id}
+                          </span>
+                        </div>
+                        
+                        <div className="md:col-span-2">
+                          <p className="text-sm text-foreground bg-background rounded-lg p-3">
+                            {comment.comment}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Registrations Table */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Todas as Inscrições</CardTitle>
+            <CardTitle className="text-xl">Todas as Inscrições (Leads)</CardTitle>
           </CardHeader>
           <CardContent>
             {registrations.length === 0 ? (
